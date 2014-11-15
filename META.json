@@ -1,0 +1,57 @@
+{
+   "abstract" : "Dist::Zilla Plugin for Inline::Module",
+   "author" : [
+      "Ingy döt Net <ingy@cpan.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 5.021, CPAN::Meta::Converter version 2.142690",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Dist-Zilla-Plugin-InlineModule",
+   "no_index" : {
+      "directory" : [
+         "inc",
+         "t",
+         "xt",
+         "example"
+      ]
+   },
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "develop" : {
+         "requires" : {
+            "Test::Pod" : "1.41"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Dist::Zilla" : "5.019",
+            "Dist::Zilla::Plugin::MakeMaker::Awesome" : "0",
+            "perl" : "v5.8.1"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/ingydotnet/dist-zilla-plugin-inlinemodule-pm/issues"
+      },
+      "homepage" : "https://github.com/ingydotnet/dist-zilla-plugin-inlinemodule-pm",
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/ingydotnet/dist-zilla-plugin-inlinemodule-pm.git",
+         "web" : "https://github.com/ingydotnet/dist-zilla-plugin-inlinemodule-pm"
+      }
+   },
+   "version" : "0.01"
+}
+
