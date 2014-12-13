@@ -3,11 +3,28 @@ NAME
     Inline::Module
 
 SYNOPSIS
-        [@InlineModule]
+        [InlineModule]
         module = My::Simple::XS::Module
+        stub = My::Simple::XS::Module::Inline
+        ilsm = Inline::C
 
 DESCRIPTION
     This module provides support for Inline::Module in Dist::Zilla.
+
+KEYWORDS
+    "module"
+        A module in "lib" that uses Inline code. You can specify this
+        keyword multiple times.
+
+    "stub"
+        An Inline::Module *stub* module. You can specify this keyword
+        multiple times. The default is to append "::Inline" to each "module"
+        keyword.
+
+    "ilsm"
+        The ILSM(s) (Inline Language Support Module) you are using. You can
+        specify this keyword multiple times. The default Inline::C.
+        Inline::CPP is the other most common value.
 
 AUTHORS
     *   Ingy döt Net <ingy@cpan.org>

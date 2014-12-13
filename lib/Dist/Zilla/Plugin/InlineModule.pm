@@ -1,54 +1,81 @@
 package Dist::Zilla::Plugin::InlineModule;
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use Moose;
-with 'Dist::Zilla::Role::AfterBuild';
-
 extends 'Dist::Zilla::Plugin::MakeMaker::Awesome';
+with qw(Dist::Zilla::Role::AfterBuild Dist::Zilla::Role::FileGatherer);
 
 has module => (
+    is => 'ro',
     isa => 'ArrayRef[Str]',
     traits => ['Array'],
-    handles => { modules => 'elements' },
     required => 1,
 );
 
-# lets us pass the 'module' option more than once
+has stub => (
+    is => 'ro',
+    lazy => 1,
+    builder => '_build_stub',
+    isa => 'ArrayRef[Str]',
+    traits => ['Array'],
+    required => 0,
+);
 
-sub mvp_multivalue_args { qw(module) }
+has ilsm => (
+    is => 'ro',
+    isa => 'ArrayRef[Str]',
+    traits => ['Array'],
+    required => 0,
+    default => sub { ['Inline::C'] },
+);
 
-# add our FixMakefile call to Makefile.PL, respecting any other
-# footer lines that were provided in dist.ini
-around _build_footer => sub {
+sub _build_stub {
+    my ($self) = @_;
+    return [ map "${_}::Inline", @{$self->module} ];
+}
+
+# Lets us pass the 'module' option more than once:
+sub mvp_multivalue_args { qw(module stub ilsm) }
+
+# Add lines to use Inline::Module to Makefile.PL
+around _build_header => sub {
+    return <<'...';
+
+use lib 'inc';
+use Inline::Module;
+
+...
+};
+
+# Add list of modules to the postamble arguments.
+around _build_WriteMakefile_args => sub {
     my $orig = shift;
     my $self = shift;
 
-    return join "\n",
-        "use lib 'inc'; use Inline::Module::MakeMaker;",
-        'Inline::Module::MakeMaker::FixMakefile(',
-        (map { "  module => '" . $_ . "'," } $self->modules),
-        ');',
-        '',
-        $self->$orig(@_);
+    my $make_args = $self->$orig(@_);
+    $make_args->{postamble}{inline} = {
+        module => $self->module,
+        stub => $self->stub,
+        ilsm => $self->ilsm,
+    };
+
+    return $make_args;
 };
 
 sub after_build {
     my ($self, $hash) = @_;
-    my $build_dir = $hash->{build_root}->stringify;
-    my @inline_modules = map "${_}::Inline", $self->modules;
     require Inline::Module;
-    local @ARGV = (
-        $build_dir,
-        @inline_modules,
+
+    my @files_added = Inline::Module->handle_distdir(
+        $hash->{build_root}->stringify,
+        @{$self->stub},
         '--',
-        'Inline',
-        'Inline::denter',
-        'Inline::C',
-        'Inline::C::Parser::RegExp',
-        'Inline::Module',
-        'Inline::Module::MakeMaker',
+        Inline::Module->new(ilsm => $self->ilsm)->included_modules,
     );
-    Inline::Module->handle_distdir;
+
+    # the following will make sure that Dist::Zilla knows about the written
+    # files so that it can add them to the tarball.
+    $self->add_file( Dist::Zilla::File::OnDisk->new( name => $_ ) ) for @files_added;
 }
 
 1;
