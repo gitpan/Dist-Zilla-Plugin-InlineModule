@@ -26,7 +26,7 @@ my %WriteMakefileArgs = (
     "Inline::Module" => "0.30",
     "Moose" => "2.1005"
   },
-  "VERSION" => "0.04",
+  "VERSION" => "0.05",
   "test" => {
     "TESTS" => "t/*.t"
   }

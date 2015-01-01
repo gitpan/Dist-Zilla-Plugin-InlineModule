@@ -27,14 +27,14 @@ KEYWORDS
         Inline::CPP is the other most common value.
 
 AUTHORS
-    *   Ingy döt Net <ingy@cpan.org>
+    Ingy döt Net <ingy@cpan.org>
 
-    *   David Oswald <davido@cpan.org>
+    David Oswald <davido@cpan.org>
 
-    *   Karen Etheridge <ether@cpan.org>
+    Karen Etheridge <ether@cpan.org>
 
-COPYRIGHT
-    Copyright 2014. Ingy döt Net.
+COPYRIGHT AND LICENSE
+    Copyright 2014-2015. Ingy döt Net.
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.
